@@ -3,6 +3,7 @@
 require("../polyfill");
 
 import { useState, useEffect } from "react";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 
 import styles from "./home.module.scss";
 
@@ -29,6 +30,9 @@ import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
 import { api } from "../client/api";
 import { useAccessStore } from "../store";
+
+// This is the chainId your dApp will work on.
+const activeChain = "goerli";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -128,41 +132,58 @@ function Screen() {
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
   const isMobileScreen = useMobileScreen();
-  const shouldTightBorder = getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
+  const shouldTightBorder =
+    getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
   useEffect(() => {
     loadAsyncGoogleFont();
   }, []);
 
   return (
-    <div
-      className={
-        styles.container +
-        ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${
-          getLang() === "ar" ? styles["rtl-screen"] : ""
-        }`
-      }
+    <ThirdwebProvider
+      activeChain={activeChain}
+      clientId={"af77cae949107b2bae1688ebc8081104"}
+      dAppMeta={{
+        name: "Soul Avatars",
+        description: "Chat with your NFTs",
+        logoUrl: "https://portal.thirdweb.com/assets/languages/react.png",
+        url: "https://example.com",
+        isDarkMode: true,
+      }}
+      authConfig={{
+        authUrl: "/api/auth",
+        domain: "https://example.com",
+      }}
     >
-      {isAuth ? (
-        <>
-          <AuthPage />
-        </>
-      ) : (
-        <>
-          <SideBar className={isHome ? styles["sidebar-show"] : ""} />
+      <div
+        className={
+          styles.container +
+          ` ${
+            shouldTightBorder ? styles["tight-container"] : styles.container
+          } ${getLang() === "ar" ? styles["rtl-screen"] : ""}`
+        }
+      >
+        {isAuth ? (
+          <>
+            <AuthPage />
+          </>
+        ) : (
+          <>
+            <SideBar className={isHome ? styles["sidebar-show"] : ""} />
 
-          <div className={styles["window-content"]} id={SlotID.AppBody}>
-            <Routes>
-              <Route path={Path.Home} element={<Chat />} />
-              <Route path={Path.NewChat} element={<NewChat />} />
-              <Route path={Path.Masks} element={<MaskPage />} />
-              <Route path={Path.Chat} element={<Chat />} />
-              <Route path={Path.Settings} element={<Settings />} />
-            </Routes>
-          </div>
-        </>
-      )}
-    </div>
+            <div className={styles["window-content"]} id={SlotID.AppBody}>
+              <Routes>
+                <Route path={Path.Home} element={<Chat />} />
+                <Route path={Path.NewChat} element={<NewChat />} />
+                <Route path={Path.Masks} element={<MaskPage />} />
+                <Route path={Path.Chat} element={<Chat />} />
+                <Route path={Path.Settings} element={<Settings />} />
+              </Routes>
+            </div>
+          </>
+        )}
+      </div>
+    </ThirdwebProvider>
   );
 }
 

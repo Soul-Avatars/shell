@@ -20,6 +20,30 @@ import { useRef, useEffect } from "react";
 import { showConfirm } from "./ui-lib";
 import { useMobileScreen } from "../utils";
 
+export function BotAvatar(props: { img: string; alt: string }) {
+  return (
+    <div
+      style={{
+        width: 48,
+        height: 48,
+        borderRadius: 8,
+        marginRight: 16,
+        overflow: "hidden",
+      }}
+    >
+      <img
+        src={props.img}
+        alt={props.alt}
+        style={{
+          width: 48,
+          objectFit: "cover",
+          objectPosition: "center",
+        }}
+      />
+    </div>
+  );
+}
+
 export function ChatItem(props: {
   onClick?: () => void;
   onDelete?: () => void;
@@ -61,25 +85,24 @@ export function ChatItem(props: {
           {props.narrow ? (
             <div className={styles["chat-item-narrow"]}>
               <div className={styles["chat-item-avatar"] + " no-dark"}>
-                <MaskAvatar
-                  avatar={props.mask.avatar}
-                  model={props.mask.modelConfig.model}
-                />
+                <BotAvatar img={props.mask.avatar} alt={props.mask.name} />
               </div>
               <div className={styles["chat-item-narrow-count"]}>
                 {props.count}
               </div>
             </div>
           ) : (
-            <>
-              <div className={styles["chat-item-title"]}>{props.title}</div>
-              <div className={styles["chat-item-info"]}>
-                <div className={styles["chat-item-count"]}>
-                  {Locale.ChatItem.ChatItemCount(props.count)}
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <BotAvatar img={props.mask.avatar} alt={props.mask.name} />
+              <div style={{ flex: 1 }}>
+                <div className={styles["chat-item-title"]}>{props.title}</div>
+                <div className={styles["chat-item-info"]}>
+                  <div className={styles["chat-item-count"]}>
+                    {Locale.ChatItem.ChatItemCount(props.count)}
+                  </div>
                 </div>
-                <div className={styles["chat-item-date"]}>{props.time}</div>
               </div>
-            </>
+            </div>
           )}
 
           <div

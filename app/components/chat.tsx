@@ -89,6 +89,7 @@ import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
+import { BotAvatar } from "./chat-list";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -1176,11 +1177,9 @@ function _Chat() {
                           {["system"].includes(message.role) ? (
                             <Avatar avatar="2699-fe0f" />
                           ) : (
-                            <MaskAvatar
-                              avatar={session.mask.avatar}
-                              model={
-                                message.model || session.mask.modelConfig.model
-                              }
+                            <BotAvatar
+                              img={session.mask.avatar}
+                              alt={session.mask.name}
                             />
                           )}
                         </>
