@@ -50,6 +50,7 @@ import {
   Draggable,
   OnDragEndResponder,
 } from "@hello-pangea/dnd";
+import { useAddress } from "@thirdweb-dev/react";
 
 // drag and drop helper function
 function reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {
@@ -397,6 +398,9 @@ export function MaskPage() {
   const [searchText, setSearchText] = useState("");
   const masks = searchText.length > 0 ? searchMasks : allMasks;
 
+  const [nfts, setNfts] = useState<any[] | undefined>(undefined);
+  const address = useAddress();
+
   // refactored already, now it accurate
   const onSearch = (text: string) => {
     setSearchText(text);
@@ -438,6 +442,18 @@ export function MaskPage() {
       } catch {}
     });
   };
+
+  useEffect(() => {
+    if (nfts) return;
+
+    async function fetchNfts() {
+      const response = await fetch(`/api/nft?address=${address}&chain=goerli`);
+      const data = await response.json();
+      console.log(data);
+      setNfts(data.nfts);
+    }
+    fetchNfts();
+  }, [address, nfts]);
 
   return (
     <ErrorBoundary>

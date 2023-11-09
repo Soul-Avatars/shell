@@ -24,6 +24,8 @@ const nextConfig = {
       child_process: false,
     };
 
+    config.externals.push("pino-pretty", "lokijs", "encoding");
+
     return config;
   },
   output: mode,

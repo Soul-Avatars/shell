@@ -146,13 +146,13 @@ function Screen() {
       dAppMeta={{
         name: "Soul Avatars",
         description: "Chat with your NFTs",
-        logoUrl: "https://portal.thirdweb.com/assets/languages/react.png",
-        url: "https://example.com",
+        logoUrl: "https://avatars.githubusercontent.com/u/137667662?s=200&v=4",
+        url: "https://localhost:3000",
         isDarkMode: true,
       }}
       authConfig={{
         authUrl: "/api/auth",
-        domain: "https://example.com",
+        domain: "https://localhost:3000",
       }}
     >
       <div
