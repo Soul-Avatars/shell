@@ -18,7 +18,6 @@ import {
   ChatMessage,
   createMessage,
   ModelConfig,
-  ModelType,
   useAppConfig,
   useChatStore,
 } from "../store";
@@ -60,11 +59,11 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {
   return result;
 }
 
-export function MaskAvatar(props: { avatar: string; model?: ModelType }) {
-  return props.avatar !== DEFAULT_MASK_AVATAR ? (
-    <Avatar avatar={props.avatar} />
+export function MaskAvatar(props: { mask: Mask }) {
+  return props.mask.avatar !== DEFAULT_MASK_AVATAR ? (
+    <Avatar avatar={props.mask.avatar} />
   ) : (
-    <Avatar model={props.model} />
+    <Avatar model={props.mask.modelConfig.model} />
   );
 }
 
@@ -108,30 +107,6 @@ export function MaskConfig(props: {
       />
 
       <List>
-        <ListItem title={Locale.Mask.Config.Avatar}>
-          <Popover
-            content={
-              <AvatarPicker
-                onEmojiClick={(emoji) => {
-                  props.updateMask((mask) => (mask.avatar = emoji));
-                  setShowPicker(false);
-                }}
-              ></AvatarPicker>
-            }
-            open={showPicker}
-            onClose={() => setShowPicker(false)}
-          >
-            <div
-              onClick={() => setShowPicker(true)}
-              style={{ cursor: "pointer" }}
-            >
-              <MaskAvatar
-                avatar={props.mask.avatar}
-                model={props.mask.modelConfig.model}
-              />
-            </div>
-          </Popover>
-        </ListItem>
         <ListItem title={Locale.Mask.Config.Name}>
           <input
             type="text"
@@ -543,7 +518,7 @@ export function MaskPage() {
               <div className={styles["mask-item"]} key={m.id}>
                 <div className={styles["mask-header"]}>
                   <div className={styles["mask-icon"]}>
-                    <MaskAvatar avatar={m.avatar} model={m.modelConfig.model} />
+                    <MaskAvatar mask={m} />
                   </div>
                   <div className={styles["mask-title"]}>
                     <div className={styles["mask-name"]}>{m.name}</div>

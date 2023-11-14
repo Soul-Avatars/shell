@@ -7,7 +7,6 @@ import { ThirdwebProvider } from "@thirdweb-dev/react";
 
 import styles from "./home.module.scss";
 
-import BotIcon from "../icons/bot.svg";
 import LoadingIcon from "../icons/three-dots.svg";
 
 import { getCSSVar, useMobileScreen } from "../utils";
@@ -37,7 +36,9 @@ const activeChain = "goerli";
 export function Loading(props: { noLogo?: boolean }) {
   return (
     <div className={styles["loading-content"] + " no-dark"}>
-      {!props.noLogo && <BotIcon />}
+      {!props.noLogo && (
+        <img src="/logo.jpeg" width={48} className={styles["loading-icon"]} />
+      )}
       <LoadingIcon />
     </div>
   );
